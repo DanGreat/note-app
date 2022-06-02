@@ -1,0 +1,46 @@
+
+<div class="card-container">
+    <mat-card>
+        <mat-card-title>Register</mat-card-title>
+        <mat-card-subtitle>Create an account</mat-card-subtitle>
+        <mat-card-content>
+            <form [formGroup]="registerForm" (ngSubmit)="register()">
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Firstname</mat-label>
+                    <input matInput formControlName="first_name" required>
+                    <mat-hint
+                    [ngClass]="{'input-invalid': (registerControls?.['first_name']?.dirty || registerControls?.['first_name']?.touched) && registerControls?.['first_name']?.errors?.['required']}"
+                    *ngIf="(registerControls?.['first_name']?.dirty || registerControls?.['first_name']?.touched) && registerControls?.['first_name']?.errors?.['required']">Firstname is required!</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Lastname</mat-label>
+                    <input matInput formControlName="last_name" required>
+                    <mat-hint 
+                    [ngClass]="{'input-invalid': (registerControls?.['last_name']?.dirty || registerControls?.['last_name']?.touched) && registerControls?.['last_name']?.errors?.['required']}"
+                    *ngIf="(registerControls?.['last_name']?.dirty || registerControls?.['last_name']?.touched) && registerControls?.['last_name']?.errors?.['required']">Lastname is required!</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" type="email" required>
+                    <mat-hint 
+                    [ngClass]="{'input-invalid': (registerControls?.['email']?.dirty || registerControls?.['email']?.touched) && registerControls?.['email']?.errors?.['email']}"
+                    *ngIf="(registerControls?.['email']?.dirty || registerControls?.['email']?.touched) && registerControls?.['email']?.errors?.['email']">Enter a valid email address!</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" formControlName="password" required>
+                    <mat-hint 
+                    [ngClass]="{'input-invalid': (registerControls?.['password']?.dirty || registerControls?.['password']?.touched) && registerControls?.['password']?.errors?.['required']}"
+                    *ngIf="(registerControls?.['password']?.dirty || registerControls?.['password']?.touched) && registerControls?.['password']?.errors?.['required']">Password should not be less than 6 digits</mat-hint>
+                </mat-form-field>
+
+                <button mat-button mat-raised-button color="primary" [disabled]="!registerForm.valid">Register</button>
+            </form>
+            <p>Already have an account? <a href="javascript:void(0)" routerLink="/login">Login</a></p>
+        </mat-card-content>
+    </mat-card>
+</div>
