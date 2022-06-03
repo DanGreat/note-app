@@ -9,6 +9,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NetworkInterceptor } from './services/network.interceptor';
 
+import { CookieService } from 'ngx-cookie-service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +25,8 @@ import { NetworkInterceptor } from './services/network.interceptor';
     BrowserAnimationsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: NetworkInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: NetworkInterceptor, multi: true },
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

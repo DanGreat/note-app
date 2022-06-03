@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { RequestService } from 'src/app/services/request.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
+              private cookieService: CookieService,
               private request: RequestService) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -39,6 +41,10 @@ export class LoginComponent implements OnInit {
         console.log('Login Response: ', response);
 
         if(response[0]?.status == 'success') {
+          console.log('Cookies on login: ', this.cookieService.getAll());
+          console.log('All broswer cookies: ', document.cookie);
+          
+          
           localStorage.setItem('isAuthenticated', 'true')
           alert(response[0]?.message)
           this.router.navigate(['/notes'])

@@ -14,6 +14,15 @@ export class NetworkInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    
+    // console.log("outgoing request",request);
+
+    // request = request.clone({
+    //   withCredentials: true
+    // });
+
+    // console.log("new outgoing request",request);
+
     return next.handle(request).pipe(
       tap(
         (event) => (event instanceof HttpResponse ? "Successful" : ""),
@@ -25,7 +34,6 @@ export class NetworkInterceptor implements HttpInterceptor {
   }
 
   handleRequestErrors(statusCode: number, errorMessage: string) {
-    console.log('Code: ', statusCode);
 
     switch(statusCode) {
       case 0:
@@ -37,6 +45,9 @@ export class NetworkInterceptor implements HttpInterceptor {
       case 401:
         alert(errorMessage || 'You are unauthorized')
         break
+      case 403:
+          alert(errorMessage || 'You are forbidden to access this resourse')
+          break
       case 404:
         alert(errorMessage || 'Resource Not Found')
         break

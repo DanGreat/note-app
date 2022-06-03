@@ -1,6 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { RequestService } from 'src/app/services/request.service';
+import {MatDialog} from '@angular/material/dialog';
+import { AddNoteComponent } from './add-note/add-note.component';
 
 
 export interface PeriodicElement {
@@ -28,15 +31,21 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss']
 })
-export class NotesComponent implements OnInit {
+export class NotesComponent implements OnInit, AfterViewInit {
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'actions'];
+  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  constructor(private request: RequestService) { }
+  constructor(private request: RequestService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getNotes()
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   getNotes() {
@@ -46,6 +55,17 @@ export class NotesComponent implements OnInit {
         
       }
     })
+  }
+
+  addOrEditNote(noteId?: number) {
+    const dialogRef = this.dialog.open(AddNoteComponent, {
+      // width: '250px',
+      data: { noteId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 }
