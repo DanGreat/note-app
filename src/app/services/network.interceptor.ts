@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpResponse
 } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 @Injectable()
 export class NetworkInterceptor implements HttpInterceptor {
@@ -15,21 +15,16 @@ export class NetworkInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     
-    // console.log("outgoing request",request);
-
-    // request = request.clone({
-    //   withCredentials: true
-    // });
-
-    // console.log("new outgoing request",request);
+    request = request.clone({
+      withCredentials: true
+    });
 
     return next.handle(request).pipe(
-      tap(
-        (event) => (event instanceof HttpResponse ? "Successful" : ""),
-        (err) => {
-          this.handleRequestErrors(err.status, (err.error.message) ? err.error.message : null);
-        }
-      )
+      catchError(err => {
+        console.log('Error Caught: ', err);
+        this.handleRequestErrors(err.status, (err.error.message) ? err.error.message : null);
+        return of(err)
+      })
     );
   }
 

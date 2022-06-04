@@ -1,71 +1,80 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { RequestService } from 'src/app/services/request.service';
-import {MatDialog} from '@angular/material/dialog';
-import { AddNoteComponent } from './add-note/add-note.component';
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AddUpdateNoteComponent } from 'src/app/components/add-update-note/add-update-note.component';
+import { ViewNoteComponent } from 'src/app/components/view-note/view-note.component';
 
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss']
 })
-export class NotesComponent implements OnInit, AfterViewInit {
+export class NotesComponent implements OnInit {
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'actions'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['S/N', 'Created By', 'Email', 'Note Title', 'Created At', 'Actions'];
+  dataSource: any;
 
-  constructor(private request: RequestService, public dialog: MatDialog) { }
+  constructor(private request: RequestService, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getNotes()
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   getNotes() {
     this.request.getNotes().subscribe({
-      next: (response) => {
-        console.log('Notes: ', response);
-        
+      next: (response: any) => {
+        this.dataSource = new MatTableDataSource<any>(response?.data);
+        this.dataSource.paginator = this.paginator;
       }
     })
   }
 
-  addOrEditNote(noteId?: number) {
-    const dialogRef = this.dialog.open(AddNoteComponent, {
-      // width: '250px',
+  addOrUpdateNote(noteId?: number) {
+    this.dialog.open(AddUpdateNoteComponent, {
+      width: '30%',
       data: { noteId }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
     });
   }
 
+  viewNote(noteId?: number) {
+    this.dialog.open(ViewNoteComponent, {
+      width: '30%',
+      data: { noteId }
+    });
+  }
+
+  deleteNote(noteId: number) {
+    const shouldDelete = confirm('Are you sure you want to delete this note?')
+
+    if(shouldDelete) {
+      this.request.deleteNote(noteId).subscribe({
+        next: (response: any) => {
+          if(response?.status === 'success'){
+            alert(response?.message)
+            this.reloadPage()
+          }
+        }
+      })
+    }
+
+  }
+
+
+  reloadPage() {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => {
+        return false;
+    }
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate(['/notes']);
+  }
+
+  logOut() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
 }

@@ -1,0 +1,38 @@
+<h1 mat-dialog-title> Note Details</h1>
+<div mat-dialog-content>
+
+    <div class="description">
+        <div>
+          <p>Title</p>
+          <h4>{{ note?.title }}</h4>
+        </div>
+        <div>
+            <p>Content</p>
+            <h4>{{ note?.content }}</h4>
+        </div>
+    </div>
+
+    <div class="description">
+        <div>
+            <p>Created By</p>
+            <h4>{{ note?.user?.first_name + ' ' +  note?.user?.last_name }}</h4>
+        </div>
+        <div>
+            <p>Created At</p>
+            <h4>{{ note?.created | date:'short' }}</h4>
+        </div>
+    </div>
+
+    <div class="description">
+        <div>
+            <p>Email</p>
+            <h4>{{ note?.user?.email }}</h4>
+        </div>
+        
+    </div>
+
+
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</div>

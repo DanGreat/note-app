@@ -38,13 +38,7 @@ export class LoginComponent implements OnInit {
     console.log('Form Value: ', this.loginForm.value);
     this.request.login(this.loginForm.value).subscribe({
       next: (response: any) => {
-        console.log('Login Response: ', response);
-
         if(response[0]?.status == 'success') {
-          console.log('Cookies on login: ', this.cookieService.getAll());
-          console.log('All broswer cookies: ', document.cookie);
-          
-          
           localStorage.setItem('isAuthenticated', 'true')
           alert(response[0]?.message)
           this.router.navigate(['/notes'])
@@ -52,7 +46,6 @@ export class LoginComponent implements OnInit {
         }
 
         localStorage.setItem('isAuthenticated', 'false')
-        
       }
     })
   }

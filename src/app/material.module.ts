@@ -10,6 +10,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatListModule} from '@angular/material/list';
+import {MatDividerModule} from '@angular/material/divider';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatMenuModule} from '@angular/material/menu';
@@ -30,6 +31,7 @@ const MATERIAL_MODULE = [
   MatSidenavModule,
   MatTooltipModule,
   MatListModule,
+  MatDividerModule,
   MatTableModule,
   MatPaginatorModule,
   MatMenuModule,

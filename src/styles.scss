@@ -35,7 +35,6 @@ $task-project-theme: mat.define-light-theme((
 @import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400&display=swap');
 
 /* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
 body { background-image: url(./assets/images/bg.jpg); background-size: cover; background-repeat: no-repeat; margin: 0; padding: 0; box-sizing: border-box; font-family: 'Oxygen', sans-serif; }
 

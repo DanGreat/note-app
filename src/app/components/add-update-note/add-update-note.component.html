@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{ data?.noteId ? 'Update' : 'Add' }} Note</h1>
+<div mat-dialog-content>
+  <p>Fill the form below to add your note</p>
+
+  <form [formGroup]="noteForm">
+    <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title">
+        <mat-hint
+          [ngClass]="{'input-invalid': (noteControls?.['title']?.dirty || noteControls?.['title']?.touched) && noteControls?.['title']?.errors?.['required']}"
+          *ngIf="(noteControls?.['title']?.dirty || noteControls?.['title']?.touched) && noteControls?.['title']?.errors?.['required']">Title is required!</mat-hint>
+      </mat-form-field>
+    
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Content</mat-label>
+        <textarea matInput placeholder="Ex. It makes me feel..."  formControlName="content"></textarea>
+        <mat-hint
+          [ngClass]="{'input-invalid': (noteControls?.['content']?.dirty || noteControls?.['content']?.touched) && noteControls?.['content']?.errors?.['required']}"
+          *ngIf="(noteControls?.['content']?.dirty || noteControls?.['content']?.touched) && noteControls?.['content']?.errors?.['required']">Content is required!</mat-hint>
+      </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-button mat-flat-button [disabled]="!noteForm.valid" (click)="addOrUpdate()" color="primary">{{ data?.noteId ? 'Update' : 'Add' }}</button>
+</div>
