@@ -33,7 +33,6 @@ export class ViewNoteComponent implements OnInit {
       next: (response: any) => {
         if(response?.status === 'success') {
           this.note = response?.data
-          console.log('Note: ', this.note);
         }
       }
     })
